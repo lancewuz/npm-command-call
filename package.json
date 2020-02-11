@@ -1,0 +1,44 @@
+{
+  "name": "npm-command-call",
+  "version": "0.0.2",
+  "description": "use npm cli commands via function calls",
+  "main": "src/index.js",
+  "scripts": {
+    "eslint": "eslint --fix src/*.js src/**/*.js",
+    "prettier": "prettier --write src/*.js src/**/*.js",
+    "test": "node test/index.js"
+  },
+  "author": "lancewuz",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lancewuz/npm-command-call.git"
+  },
+  "homepage": "https://github.com/lancewuz/npm-command-call",
+  "keywords": [
+    "npm",
+    "npm command",
+    "npm api",
+    "npm cli"
+  ],
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "libnpm": "~3.0.1",
+    "nopt": "~4.0.1",
+    "npm": "~6.12.0",
+    "npmlog": "~4.1.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "eslint": "^6.8.0",
+    "husky": "^4.0.10",
+    "lint-staged": "^10.0.1",
+    "prettier": "^1.19.1",
+    "standard-changelog": "^2.0.21",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
+  }
+}

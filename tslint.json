@@ -1,0 +1,42 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": {
+      "options": {
+        "esSpecCompliant": true,
+        "multiline": "always",
+        "singleline": "never"
+      }
+    },
+    "max-len": [
+      "error",
+      {
+        "code": 150
+      }
+    ],
+    "object-literal-key-quotes": [
+      true,
+      "as-needed"
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape",
+      "avoid-template"
+    ],
+    "max-line-length": [true, 200],
+    "interface-name": false,
+    "no-consecutive-blank-lines": false,
+    "ordered-imports": false,
+    "array-type": false,
+    "jsdoc-format": false,
+    "one-variable-per-declaration": false,
+    "object-literal-sort-keys": false,
+    "arrow-parens": [true, "ban-single-arg-parens"]
+  },
+  "rulesDirectory": []
+}
