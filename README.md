@@ -1,4 +1,4 @@
-# npm-command-call [![npm version](https://badgen.net/badge/npm/0.0.1/red)](https://www.npmjs.com/package/npm-command-call)
+# npm-command-call [![npm version](https://badgen.net/badge/npm/0.0.x/red)](https://www.npmjs.com/package/npm-command-call)
 
 以函数调用的方式使用npm cli的命令。
 
