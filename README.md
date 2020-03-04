@@ -39,7 +39,7 @@ npm i npm-command-call
 | 2、使用登录API和默认的登录态管理 | 运行时使用一个账户，动态指定 |
 | 3、使用登录API并自己管理登录态 | 运行时并发使用多个账户，动态指定 |
 
-### <a name="callapi"></a> `> Call API`
+### <a name="callapi"></a> Call API
 
 引入API并调用。
 
