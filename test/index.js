@@ -22,8 +22,8 @@ runCmd(['whoami']).catch(err => {
 //   console.log('#err', err)
 // })
 
-runCmdWithCreds(["whoami", "--registry=https://registry.npmjs.org"], {
-  token: ''
-}).catch(err => {
-  console.log('#err', err)
-})
+// runCmdWithCreds(["whoami", "--registry=https://registry.npmjs.org"], {
+//   token: ''
+// }).catch(err => {
+//   console.log('#err', err)
+// })
