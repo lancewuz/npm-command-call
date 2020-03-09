@@ -10,7 +10,7 @@ unsupported.checkForUnsupportedNode();
 const npm = require('npm/lib/npm.js');
 const npmconf = require('npm/lib/config/core.js');
 
-const { adduserLegacy, adduserSso } = require('./lib/adduser');
+const { adduserLegacy, adduserSso, adduserSsoUnsafe, pollForSsoSession } = require('./lib/adduser');
 const whoami = require('./lib/whoami');
 const publish = require('./lib/publish');
 
@@ -97,6 +97,14 @@ async function adduserBySso(registry, scope, cb, ssoType, self) {
   return loadConfig().then(() => adduserSso(registry, scope, cb, ssoType, self));
 }
 
+async function adduserBySsoUnsafe(registry, scope, ssoType) {
+  return loadConfig().then(() => adduserSsoUnsafe(registry, scope, ssoType));
+}
+
+async function checkSsoToken(token, registry, scope) {
+  return loadConfig().then(() => pollForSsoSession(registry, token, scope));
+}
+
 function loadConfig() {
   const conf = nopt(types, shorthands, [], 0);
   return new Promise((resolve, reject) => {
@@ -113,6 +121,8 @@ function loadConfig() {
 module.exports = {
   adduserByLeagcy,
   adduserBySso,
+  adduserBySsoUnsafe,
+  checkSsoToken,
   runCmd,
   runCmdWithCreds,
 };

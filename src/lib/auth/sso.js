@@ -19,8 +19,25 @@ const SsoOpts = figgyPudding({
 const pollMaxTimes = 100
 let pollIndex = 0
 
-async function login(creds, registry, scope, cb, ssoTypeIn) {
-  const opts = SsoOpts(npmConfig()).concat({ creds, registry, scope })
+async function login(registry, scope, ssoTypeIn, cb) {
+  return loginUnsafe(registry, scope, ssoTypeIn)
+  .then(({ token, sso }) => {
+    console.log(token, sso)
+    if (typeof cb === 'function') {
+      cb(sso)
+    }
+
+    const opts = SsoOpts(npmConfig()).concat({ creds: {}, registry, scope })
+
+    return sleep(1000).then(() => {
+      return pollForSession(registry, token, opts, scope)
+    })
+  })
+
+}
+
+async function loginUnsafe(registry, scope, ssoTypeIn) {
+  const opts = SsoOpts(npmConfig()).concat({ creds: {}, registry, scope })
   const ssoType = ssoTypeIn || opts.ssoType
 
   if (!ssoType) {
@@ -43,16 +60,14 @@ async function login(creds, registry, scope, cb, ssoTypeIn) {
   ).then(({ token, sso }) => {
     if (!token) { throw new Error('no SSO token returned') }
     if (!sso) { throw new Error('no SSO URL returned by services') }
-
-    if (typeof cb === 'function') {
-      cb(sso)
-    }
-
-    return sleep(1000).then(() => {
-      return pollForSession(registry, token, opts, scope)
-    })
+    return { token, sso }
   })
+}
 
+async function pollForSsoSession(registry, token, scope) {
+  pollIndex = 0
+  const opts = SsoOpts(npmConfig()).concat({ creds: {}, registry, scope })
+  return pollForSession(registry, token, opts, scope)
 }
 
 function pollForSession(registry, token, opts, scope) {
@@ -61,7 +76,7 @@ function pollForSession(registry, token, opts, scope) {
   return npmFetch.json(
     '/-/whoami', opts.concat({ registry, forceAuth: { token } })
   ).then(
-    ({ username }) => username,
+    ({ username }) => ({ username }),
     err => {
       if (err.code === 'E401' && pollIndex <= pollMaxTimes) {
         return sleep(opts['sso-poll-frequency']).then(() => {
@@ -71,11 +86,11 @@ function pollForSession(registry, token, opts, scope) {
         throw err
       }
     }
-  ).then(username => {
-    log.info('adduser', 'Authorized user %s', username)
-    var scopeMessage = scope ? ' to scope ' + scope : ''
-    output('Logged in as %s%s on %s.', username, scopeMessage, registry)
-    return { token }
+  ).then(({ username }) => {
+    // log.info('adduser', 'Authorized user %s', username)
+    // var scopeMessage = scope ? ' to scope ' + scope : ''
+    // output('Logged in as %s%s on %s.', username, scopeMessage, registry)
+    return { token, username }
   })
 }
 
@@ -86,5 +101,7 @@ function sleep(time) {
 }
 
 module.exports = {
-  login
+  login,
+  loginUnsafe,
+  pollForSsoSession,
 }

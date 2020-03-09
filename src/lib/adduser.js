@@ -1,5 +1,5 @@
 const { login: loginLegacy } = require('./auth/legacy');
-const { login: loginSso } = require('./auth/sso');
+const { login: loginSso, loginUnsafe, pollForSsoSession } = require('./auth/sso');
 const BB = require('bluebird');
 const openUrl = BB.promisify(require('npm/lib/utils/open-url.js'));
 const npm = require('npm/lib/npm');
@@ -35,13 +35,24 @@ async function adduserSso(registry, scope, cb, ssoType = 'oauth', self = false) 
       openUrl(ssoUri, 'to complete your login please visit');
     };
   }
-  return loginSso({}, registry, scope, cb, ssoType).then(newCreds => {
+
+  return loginSso(registry, scope, ssoType, cb).then(newCreds => {
     if (!self) {
       return updateCreds(newCreds, registry, scope);
     } else {
       return newCreds;
     }
   });
+}
+
+async function adduserSsoUnsafe(registry, scope, ssoType = 'oauth') {
+  if (!crypto) {
+    throw new Error('You must compile node with ssl support to use the adduser feature');
+  }
+
+  npm.config.set('auth-type', '');
+  npm.config.set('sso-type', ssoType);
+  return loginUnsafe(registry, scope, ssoType);
 }
 
 function updateCreds(newCreds, regis, scop) {
@@ -63,5 +74,9 @@ function updateCreds(newCreds, regis, scop) {
   });
 }
 
-module.exports.adduserLegacy = adduserLegacy;
-module.exports.adduserSso = adduserSso;
+module.exports = {
+  adduserLegacy,
+  adduserSso,
+  adduserSsoUnsafe,
+  pollForSsoSession,
+};

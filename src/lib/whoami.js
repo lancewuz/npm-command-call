@@ -33,6 +33,7 @@ async function whoami(args, creds = {}, inputRegistry) {
             '/-/whoami',
             opts.concat({
               registry,
+              forceAuth: { token },
             }),
           )
           .then(({ username }) => {
