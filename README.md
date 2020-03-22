@@ -164,25 +164,6 @@ adduserBySsoUnsafe('https://registry.npmjs.org').then(({ token, sso }) => {
 })
 ```
 
-### <a name="adduserBySsoUnsafe"></a> `> adduserBySsoUnsafe(registry, scope, ssoType) -> Promise<{ token: string, sso: string }>`
-
-使用SSO进行登录，返回token和sso链接，返回的token需要等点击sso链接进行登录后才会生效。
-
-#### 参数说明
-
-`registry`指[npm-registry](https://docs.npmjs.com/misc/registry)，选填;`scope`指[npm-scope](https://docs.npmjs.com/misc/scope.html)，选填;`ssoType`指处理sso的类型，取值包括’oauth‘和’saml‘，默认为’oauth‘，选填;
-
-#### 示例
-
-```javascript
-adduserBySsoUnsafe('https://registry.npmjs.org').then(({ token, sso }) => {
-  openUrl(sso) // 在浏览器上打开链接进行登录
-  save({ token }) // 以某种形式保存登录态
-}).catch((err) => {
-  console.log(err)
-})
-```
-
 ### <a name="checkSsoToken"></a> `> checkSsoToken(token, registry, scope) -> Promise<{ token: string, sso: string }>`
 
 检测token是否生效，结合[`adduserBySsoUnsafe`](#adduserBySsoUnsafe)使用。
